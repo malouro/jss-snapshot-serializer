@@ -1,26 +1,56 @@
 {
   "name": "jss-snapshot-serializer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Jest snapshot serializer for JSS",
-  "main": "src/jss-snapshot-serializer.js",
+  "main": "dist",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "yarn clean && babel src -d ./dist",
+    "prepublishOnly": "yarn build",
+    "clean": "npx rimraf ./node_modules ./dist",
+    "clean:install": "yarn clean && yarn",
+    "lint": "eslint ./src/*.js",
+    "test": "jest",
+    "test:ci": "yarn lint && yarn test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cssinjs/jss-snapshot-serializer.git"
+    "clean": "npx rimraf node_modules",
+    "url": "git+https://github.com/malouro/jss-snapshot-serializer.git"
   },
   "keywords": [
     "jss",
     "jest",
     "snapshot",
     "test",
-    "css-in-js"
+    "css-in-js",
+    "enzyme",
+    "react"
   ],
   "author": "Vladimir Guguiev <wizardzloy@gmail.com>",
+  "contributors": [
+    "Mike Louro <michael.aa.louro@gmail.com>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/cssinjs/jss-snapshot-serializer/issues"
   },
-  "homepage": "https://github.com/cssinjs/jss-snapshot-serializer#readme"
+  "homepage": "https://github.com/cssinjs/jss-snapshot-serializer#readme",
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-jest": "^24.7.1",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.12.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-react": "^7.12.4",
+    "jest": "^24.7.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-jss": "^8.6.1"
+  },
+  "dependencies": {
+    "enzyme-to-json": "^3.3.5"
+  }
 }

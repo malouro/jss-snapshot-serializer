@@ -1,3 +1,5 @@
+import enzymeToJson from 'enzyme-to-json';
+import { isEnzymeWrapper } from 'enzyme-to-json/utils';
 const MARKER = '__jss-snapshot-serializer-marker__';
 
 const jssClassNameRegexp = /([a-zA-Z0-9]*)-([a-zA-Z0-9]*)-([0-9]*)-([0-9]*)/;
@@ -49,16 +51,23 @@ const replaceJssClassNames = (elements) => {
   });
 };
 
-
 module.exports = {
   test(value) {
     // apply the serializer only to react elements that we haven't marked(processed) before
-    return value && !value[MARKER] && value.$$typeof === Symbol.for('react.test.json');
+    // additionally, will only run on detected Enzyme wrappers
+    return (
+      value &&
+      !value[MARKER] &&
+      value.$$typeof === Symbol.for('react.test.json') &&
+      isEnzymeWrapper(value)
+    );
   },
 
   print(value, serialize) {
     // collect all react element nodes in the tree of the value
     const elements = collectElements(value);
+
+    // console.log('elements are: ', elements);
 
     // mark the collected element nodes to avoid processing them several times
     markElements(elements);
@@ -67,6 +76,8 @@ module.exports = {
     // to keep the snapshots repeatable
     replaceJssClassNames(elements);
 
-    return serialize(value);
-  },
+    const jsonToSnapshot = enzymeToJson(value);
+    console.log(jsonToSnapshot);
+    return serialize(jsonToSnapshot);
+  }
 };
